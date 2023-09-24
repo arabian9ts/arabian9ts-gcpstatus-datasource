@@ -47,21 +47,17 @@ export class DataSource extends DataSourceApi<StatusQuery, StatusDataSourceOptio
     const to = new Date(range!.to.valueOf()).getTime();
 
     const promises = options.targets.map(async (target) => {
-      const query = defaults(target, defaultQuery);
-      const serviceQuery = new RegExp(query.service);
-      const locationQuery = new RegExp(query.location);
-
       const apiRequest = (): Promise<Incident[]> => fetch(this.url).then((r) => r.json());
       const response = await apiRequest();
 
       const defaultFields = [
+          { name: 'level', type: FieldType.string },
           { name: 'time', type: FieldType.time },
           { name: 'content', type: FieldType.string },
-          { name: 'id', type: FieldType.string },
-          { name: 'level', type: FieldType.string },
           { name: 'service', type: FieldType.string },
           { name: 'locations', type: FieldType.string },
           { name: 'text', type: FieldType.string },
+          { name: 'id', type: FieldType.string },
       ]
 
       const incidentFrame = new MutableDataFrame({
@@ -70,32 +66,49 @@ export class DataSource extends DataSourceApi<StatusQuery, StatusDataSourceOptio
         fields: defaultFields,
       });
 
+      const query = defaults(target, defaultQuery);
+
+      let serviceQuery: RegExp | null = null;
+      if (query.service) {
+        serviceQuery = new RegExp(query.service);
+      }
+
+      let locationQuery: RegExp | null = null;
+      if (query.location) {
+        locationQuery = new RegExp(query.location);
+      }
+
       response.forEach((incident: Incident) => {
         const timestamp = new Date(incident.begin).getTime()
         if (timestamp < from || timestamp > to) {
-          return
+          return;
         }
 
-        if (!serviceQuery.test(incident.service_name)) {
-          return
+        if (serviceQuery && !serviceQuery.test(incident.most_recent_update.text)) {
+          return;
         }
-        if (!serviceQuery.test(incident.most_recent_update.text)) {
-          return
-        }
-        for (const loc of incident.most_recent_update.affected_locations) {
-          if (!locationQuery.test(loc.id)) {
-            return
+
+        if (locationQuery) {
+          let hit = false;
+          for (const loc of incident.most_recent_update.affected_locations) {
+            if (locationQuery.test(loc.id)) {
+              hit = true;
+              break;
+            }
+          }
+          if (!hit) {
+            return;
           }
         }
 
         incidentFrame.add({
+          level: statusToLevel(incident.most_recent_update.status),
           time: timestamp,
           content: `${incident.begin} [${incident.most_recent_update.status}] ${incident.service_name}`,
-          level: statusToLevel(incident.most_recent_update.status),
-          id: incident.id,
           service: incident.service_name,
           locations: incident.most_recent_update.affected_locations.map((location: AffectedLocation) => location.title).join(', '),
           text: incident.most_recent_update.text,
+          id: incident.id,
         });
       });
 

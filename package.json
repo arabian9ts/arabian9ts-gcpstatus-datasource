@@ -1,7 +1,7 @@
 {
   "name": "test",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Load GCP incident logs from the status page",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
     "dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",

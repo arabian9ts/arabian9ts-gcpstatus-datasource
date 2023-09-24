@@ -8,7 +8,8 @@ https://status.cloud.google.com/incidents.json
 
 and allows visualizing them in a log format.
 
-![Screenshot](https://github.com/arabian9ts/arabian9ts-gcpstatus-datasource/raw/main/docs/screenshot.jpg)
+![Screenshot1](https://github.com/arabian9ts/arabian9ts-gcpstatus-datasource/raw/main/src/img/screenshot1.jpg)
+![Screenshot2](https://github.com/arabian9ts/arabian9ts-gcpstatus-datasource/raw/main/src/img/screenshot2.jpg)
 
 
 ## Requirements

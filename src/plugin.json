@@ -6,17 +6,26 @@
   "metrics": false,
   "logs": true,
   "info": {
-    "description": "",
+    "description": "Load GCP incident logs from the status page",
     "author": {
-      "name": "Arabian9ts"
+      "name": "arabian9ts"
     },
-    "keywords": ["datasource"],
+    "keywords": ["datasource", "gcp", "status"],
     "logos": {
       "small": "img/logo.svg",
       "large": "img/logo.svg"
     },
     "links": [],
-    "screenshots": [],
+    "screenshots": [
+      {
+        "name": "GCP incidents for logs",
+        "path": "img/screenshot1.jpg"
+      },
+      {
+        "name": "GCP incidents for table",
+        "path": "img/screenshot2.jpg"
+      }
+    ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },

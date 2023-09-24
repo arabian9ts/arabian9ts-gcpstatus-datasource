@@ -8,8 +8,8 @@ export interface StatusQuery extends DataQuery {
 }
 
 export const defaultQuery: Partial<StatusQuery> = {
-  service: '.*',
-  location: '.*',
+  service: '',
+  location: '',
 }
 
 export type Status = 'AVAILABLE' | 'SERVICE_INFORMATION' | 'SERVICE_DISRUPTION' | 'SERVICE_OUTAGE';

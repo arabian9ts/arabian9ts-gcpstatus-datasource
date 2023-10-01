@@ -3,7 +3,7 @@
   "type": "datasource",
   "name": "GCP Status",
   "id": "arabian9ts-gcpstatus-datasource",
-  "metrics": false,
+  "metrics": true,
   "logs": true,
   "info": {
     "description": "Load GCP incident logs from the status page",
